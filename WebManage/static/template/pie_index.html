@@ -1,0 +1,668 @@
+{% extends "admin/mybase_site.html" %}
+{% load i18n admin_static admin_list admin_urls suit_list suit_tags %}
+{% load url from suit_compat %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  {#  <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}" />#}
+  {% if cl.formset %}
+    {#    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />#}
+  {% endif %}
+  {% if cl.formset or action_form %}
+    {% url 'admin:jsi18n' as jsi18nurl %}
+    <script type="text/javascript" src="{{ jsi18nurl|default:'../../jsi18n/' }}"></script>
+  {% endif %}
+  {{ media.css }}
+  {% if not actions_on_top and not actions_on_bottom %}
+    <style>
+      {#      #changelist table thead th:first-child {width: inherit}#}
+    </style>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<script type="text/javascript" src="http://cdn.hcharts.cn/jquery/jquery-1.8.3.min.js"></script>
+    <div id="content-main">
+        <div class="choose_year">
+            <ul class="breadcrumb">
+                <a href="{% url 'line_index' %}" class="btn btn-info">区域图</a>
+                <a href="{% url 'column_index' %}" class="btn btn-info">柱状图</a>
+                <a href="{% url 'pie_index' %}" class="btn btn-info">饼图</a>
+            </ul>
+        </div>
+        <div id="charts" style="margin-top:30px">
+            
+            <style type="text/css">
+            ${demo.css}
+            </style>
+            <script type="text/javascript">
+            $(function () {
+                $('#charts').highcharts({
+                    chart: {
+                        type: 'pie',
+                        options3d: {
+                            enabled: true,
+                            alpha: 45,
+                            beta: 0
+                        }
+                    },
+                    title: {
+                        text: 'The Percentage of every game in total records'
+                    },
+                    plotOptions: {
+                        series: {
+                            dataLabels: {
+                                enabled: true,
+                                format: '{point.name}: {point.y:.1f}%'
+                            }
+                        },
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            depth: 35,
+                            dataLabels: {
+                                enabled: true,
+                                format: '{point.name}'
+                            }
+                        }
+                    },
+                    
+                   
+                    tooltip: {
+                        valueSuffix: '%'
+                    },
+                    series: [{
+                        name: 'Percentage in totals',
+                        colorByPoint: true,
+                        data: [{
+                            name: 'Game1',
+                            y: {{aa_}},
+                            drilldown: 'Game1',
+                            sliced: true,
+                            selected: true
+                        }, {
+                            name: 'Game2',
+                            y: {{ab_}},
+                            drilldown: 'Game2'
+                        }, {
+                            name: 'Game3',
+                            y: {{ac_}},
+                            drilldown: 'Game3'
+                        }]
+                    }],
+                    drilldown: {
+                        series: [{
+                            name: 'Percentage in totals(Game1)',
+                            id: 'Game1',
+                            data: [{
+                                    name: 'Game1-2010年',
+                                    drilldown: 'Game1-2010年',
+                                    y: {{lena.0}},
+                                    sliced: true,
+                                    selected: true
+                                }, {
+                                    name: 'Game1-2011年',
+                                    drilldown: 'Game1-2011年',
+                                    y: {{lena.1}},
+                                }, 
+                                {
+                                    name: 'Game1-2012年',
+                                    drilldown: 'Game1-2012年',
+                                    y: {{lena.2}},
+                                }, 
+                                {
+                                    name: 'Game1-2013年',
+                                    drilldown: 'Game1-2013年',
+                                    y: {{lena.3}},
+                                }, 
+                                {
+                                    name: 'Game1-2014年',
+                                    drilldown: 'Game1-2014年',
+                                    y: {{lena.4}},
+                                }, 
+                                {
+                                    name: 'Game1-2015年',
+                                    drilldown: 'Game1-2015年',
+                                    y: {{lena.5}},
+                                }, {
+                                    name: 'Game1-2016年',
+                                    drilldown: 'Game1-2016年',
+                                    y: {{lena.6}},
+                                }
+                            ]
+                        }, {
+                            name: 'Percentage in totals(Game2)',
+                            id: 'Game2',
+                            data: [{
+                                    name: 'Game2-2010年',
+                                    drilldown: 'Game2-2010年',
+                                    y: {{lenb.0}},
+                                    sliced: true,
+                                    selected: true
+                                }, {
+                                    name: 'Game2-2011年',
+                                    drilldown: 'Game2-2011年',
+                                    y: {{lenb.1}},
+                                }, 
+                                {
+                                    name: 'Game2-2012年',
+                                    drilldown: 'Game2-2012年',
+                                    y: {{lenb.2}},
+                                }, 
+                                {
+                                    name: 'Game2-2013年',
+                                    drilldown: 'Game2-2013年',
+                                    y: {{lenb.3}},
+                                }, 
+                                {
+                                    name: 'Game2-2014年',
+                                    drilldown: 'Game2-2014年',
+                                    y: {{lenb.4}},
+                                }, 
+                                {
+                                    name: 'Game2-2015年',
+                                    drilldown: 'Game2-2015年',
+                                    y: {{lenb.5}},
+                                }, {
+                                    name: 'Game2-2016年',
+                                    drilldown: 'Game2-2016年',
+                                    y: {{lenb.6}},
+                                }
+                            ]
+                        }, {
+                            name: 'Percentage in totals(Game3)',
+                            id: 'Game3',
+                            data: [{
+                                    name: 'Game3-2010年',
+                                    drilldown: 'Game3-2010年',
+                                    y: {{lenc.0}},
+                                    sliced: true,
+                                    selected: true
+                                }, {
+                                    name: 'Game3-2011年',
+                                    drilldown: 'Game3-2011年',
+                                    y: {{lenc.1}},
+                                }, 
+                                {
+                                    name: 'Game3-2012年',
+                                    drilldown: 'Game3-2012年',
+                                    y: {{lenc.2}},
+                                }, 
+                                {
+                                    name: 'Game3-2013年',
+                                    drilldown: 'Game3-2013年',
+                                    y: {{lenc.3}},
+                                }, 
+                                {
+                                    name: 'Game3-2014年',
+                                    drilldown: 'Game3-2014年',
+                                    y: {{lenc.4}},
+                                },
+                                {
+                                    name: 'Game3-2015年',
+                                    drilldown: 'Game3-2015年',
+                                    y: {{lenc.5}},
+                                }, {
+                                    name: 'Game3-2016年',
+                                    drilldown: 'Game3-2016年',
+                                    y: {{lenc.6}},
+                                }
+                            ]
+                        },{
+                                name:'Percentage in totals',
+                                id: 'Game1-2010年',
+                                data:[{
+                                    name: 'Game1-2010年-1月',
+                                    y: {{lenaa.0}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game1-2010年-2月',{{lenaa.1}}],
+                                ['Game1-2010年-3月',{{lenaa.2}}],
+                                ['Game1-2010年-4月',{{lenaa.3}}],
+                                ['Game1-2010年-5月',{{lenaa.4}}],
+                                ['Game1-2010年-6月',{{lenaa.5}}],
+                                ['Game1-2010年-7月',{{lenaa.6}}],
+                                ['Game1-2010年-8月',{{lenaa.7}}],
+                                ['Game1-2010年-9月',{{lenaa.8}}],
+                                ['Game1-2010年-10月',{{lenaa.9}}],
+                                ['Game1-2010年-11月',{{lenaa.10}}],
+                                ['Game1-2010年-12月',{{lenaa.11}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game1-2011年',
+                                data:[{
+                                    name: 'Game1-2011年-1月',
+                                    y: {{lenaa.12}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game1-2011年-2月',{{lenaa.13}}],
+                                ['Game1-2011年-3月',{{lenaa.14}}],
+                                ['Game1-2011年-4月',{{lenaa.15}}],
+                                ['Game1-2011年-5月',{{lenaa.16}}],
+                                ['Game1-2011年-6月',{{lenaa.17}}],
+                                ['Game1-2011年-7月',{{lenaa.18}}],
+                                ['Game1-2011年-8月',{{lenaa.19}}],
+                                ['Game1-2011年-9月',{{lenaa.20}}],
+                                ['Game1-2011年-10月',{{lenaa.21}}],
+                                ['Game1-2011年-11月',{{lenaa.22}}],
+                                ['Game1-2011年-12月',{{lenaa.23}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game1-2012年',
+                                data:[{
+                                    name: 'Game1-2012年-1月',
+                                    y: {{lenaa.24}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game1-2012年-2月',{{lenaa.25}}],
+                                ['Game1-2012年-3月',{{lenaa.26}}],
+                                ['Game1-2012年-4月',{{lenaa.27}}],
+                                ['Game1-2012年-5月',{{lenaa.28}}],
+                                ['Game1-2012年-6月',{{lenaa.29}}],
+                                ['Game1-2012年-7月',{{lenaa.30}}],
+                                ['Game1-2012年-8月',{{lenaa.31}}],
+                                ['Game1-2012年-9月',{{lenaa.32}}],
+                                ['Game1-2012年-10月',{{lenaa.33}}],
+                                ['Game1-2012年-11月',{{lenaa.34}}],
+                                ['Game1-2012年-12月',{{lenaa.35}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game1-2013年',
+                                data:[{
+                                    name: 'Game1-2013年-1月',
+                                    y: {{lenaa.36}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game1-2013年-2月',{{lenaa.37}}],
+                                ['Game1-2013年-3月',{{lenaa.38}}],
+                                ['Game1-2013年-4月',{{lenaa.39}}],
+                                ['Game1-2013年-5月',{{lenaa.40}}],
+                                ['Game1-2013年-6月',{{lenaa.41}}],
+                                ['Game1-2013年-7月',{{lenaa.42}}],
+                                ['Game1-2013年-8月',{{lenaa.43}}],
+                                ['Game1-2013年-9月',{{lenaa.44}}],
+                                ['Game1-2013年-10月',{{lenaa.45}}],
+                                ['Game1-2013年-11月',{{lenaa.46}}],
+                                ['Game1-2013年-12月',{{lenaa.47}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game1-2014年',
+                                data:[{
+                                    name: 'Game1-2014年-1月',
+                                    y: {{lenaa.48}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game1-2014年-2月',{{lenaa.49}}],
+                                ['Game1-2014年-3月',{{lenaa.50}}],
+                                ['Game1-2014年-4月',{{lenaa.51}}],
+                                ['Game1-2014年-5月',{{lenaa.52}}],
+                                ['Game1-2014年-6月',{{lenaa.53}}],
+                                ['Game1-2014年-7月',{{lenaa.54}}],
+                                ['Game1-2014年-8月',{{lenaa.55}}],
+                                ['Game1-2014年-9月',{{lenaa.56}}],
+                                ['Game1-2014年-10月',{{lenaa.57}}],
+                                ['Game1-2014年-11月',{{lenaa.58}}],
+                                ['Game1-2014年-12月',{{lenaa.59}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game1-2015年',
+                                data:[{
+                                    name: 'Game1-2015年-1月',
+                                    y: {{lenaa.60}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game1-2015年-2月',{{lenaa.61}}],
+                                ['Game1-2015年-3月',{{lenaa.62}}],
+                                ['Game1-2015年-4月',{{lenaa.63}}],
+                                ['Game1-2015年-5月',{{lenaa.64}}],
+                                ['Game1-2015年-6月',{{lenaa.65}}],
+                                ['Game1-2010年-7月',{{lenaa.66}}],
+                                ['Game1-2015年-8月',{{lenaa.67}}],
+                                ['Game1-2015年-9月',{{lenaa.68}}],
+                                ['Game1-2015年-10月',{{lenaa.69}}],
+                                ['Game1-2015年-11月',{{lenaa.70}}],
+                                ['Game1-2015年-12月',{{lenaa.71}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game1-2016年',
+                                data:[{
+                                    name: 'Game1-2016年-1月',
+                                    y: {{lenaa.72}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game1-2016年-2月',{{lenaa.73}}],
+                                ['Game1-2016年-3月',{{lenaa.74}}],
+                                ['Game1-2016年-4月',{{lenaa.75}}],
+                                ['Game1-2016年-5月',{{lenaa.76}}],
+                                ['Game1-2016年-6月',{{lenaa.77}}],
+                                ['Game1-2016年-7月',{{lenaa.78}}],
+                                ['Game1-2016年-8月',{{lenaa.79}}],
+                                ['Game1-2016年-9月',{{lenaa.80}}],
+                                ['Game1-2016年-10月',{{lenaa.81}}],
+                                ['Game1-2016年-11月',{{lenaa.82}}],
+                                ['Game1-2016年-12月',{{lenaa.83}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game2-2010年',
+                                data:[{
+                                    name: 'Game2-2010年-1月',
+                                    y: {{lenbb.0}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game2-2010年-2月',{{lenbb.1}}],
+                                ['Game2-2010年-3月',{{lenbb.2}}],
+                                ['Game2-2010年-4月',{{lenbb.3}}],
+                                ['Game2-2010年-5月',{{lenbb.4}}],
+                                ['Game2-2010年-6月',{{lenbb.5}}],
+                                ['Game2-2010年-7月',{{lenbb.6}}],
+                                ['Game2-2010年-8月',{{lenbb.7}}],
+                                ['Game2-2010年-9月',{{lenbb.8}}],
+                                ['Game2-2010年-10月',{{lenbb.9}}],
+                                ['Game2-2010年-11月',{{lenbb.10}}],
+                                ['Game2-2010年-12月',{{lenbb.11}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game2-2011年',
+                                data:[{
+                                    name: 'Game2-2011年-1月',
+                                    y: {{lenbb.12}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game2-2011年-2月',{{lenbb.13}}],
+                                ['Game2-2011年-3月',{{lenbb.14}}],
+                                ['Game2-2011年-4月',{{lenbb.15}}],
+                                ['Game2-2011年-5月',{{lenbb.16}}],
+                                ['Game2-2011年-6月',{{lenbb.17}}],
+                                ['Game2-2011年-7月',{{lenbb.18}}],
+                                ['Game2-2011年-8月',{{lenbb.19}}],
+                                ['Game2-2011年-9月',{{lenbb.20}}],
+                                ['Game2-2011年-10月',{{lenbb.21}}],
+                                ['Game2-2011年-11月',{{lenbb.22}}],
+                                ['Game2-2011年-12月',{{lenbb.23}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game2-2012年',
+                                data:[{
+                                    name: 'Game2-2012年-1月',
+                                    y: {{lenbb.24}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game2-2012年-2月',{{lenbb.25}}],
+                                ['Game2-2012年-3月',{{lenbb.26}}],
+                                ['Game2-2012年-4月',{{lenbb.27}}],
+                                ['Game2-2012年-5月',{{lenbb.28}}],
+                                ['Game2-2012年-6月',{{lenbb.29}}],
+                                ['Game2-2012年-7月',{{lenbb.30}}],
+                                ['Game2-2012年-8月',{{lenbb.31}}],
+                                ['Game2-2012年-9月',{{lenbb.32}}],
+                                ['Game2-2012年-10月',{{lenbb.33}}],
+                                ['Game2-2012年-11月',{{lenbb.34}}],
+                                ['Game2-2012年-12月',{{lenbb.35}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game2-2013年',
+                                data:[{
+                                    name: 'Game2-2013年-1月',
+                                    y: {{lenbb.36}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game2-2013年-2月',{{lenbb.37}}],
+                                ['Game2-2013年-3月',{{lenbb.38}}],
+                                ['Game2-2013年-4月',{{lenbb.39}}],
+                                ['Game2-2013年-5月',{{lenbb.40}}],
+                                ['Game2-2013年-6月',{{lenbb.41}}],
+                                ['Game2-2013年-7月',{{lenbb.42}}],
+                                ['Game2-2013年-8月',{{lenbb.43}}],
+                                ['Game2-2013年-9月',{{lenbb.44}}],
+                                ['Game2-2013年-10月',{{lenbb.45}}],
+                                ['Game2-2013年-11月',{{lenbb.46}}],
+                                ['Game2-2013年-12月',{{lenbb.47}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game2-2014年',
+                                data:[{
+                                    name: 'Game2-2014年-1月',
+                                    y: {{lenbb.48}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game2-2014年-2月',{{lenbb.49}}],
+                                ['Game2-2014年-3月',{{lenbb.50}}],
+                                ['Game2-2014年-4月',{{lenbb.51}}],
+                                ['Game2-2014年-5月',{{lenbb.52}}],
+                                ['Game2-2014年-6月',{{lenbb.53}}],
+                                ['Game2-2014年-7月',{{lenbb.54}}],
+                                ['Game2-2014年-8月',{{lenbb.55}}],
+                                ['Game2-2014年-9月',{{lenbb.56}}],
+                                ['Game2-2014年-10月',{{lenbb.57}}],
+                                ['Game2-2014年-11月',{{lenbb.58}}],
+                                ['Game2-2014年-12月',{{lenbb.59}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game2-2015年',
+                                data:[{
+                                    name: 'Game2-2015年-1月',
+                                    y: {{lenbb.60}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game2-2015年-2月',{{lenbb.61}}],
+                                ['Game2-2015年-3月',{{lenbb.62}}],
+                                ['Game2-2015年-4月',{{lenbb.63}}],
+                                ['Game2-2015年-5月',{{lenbb.64}}],
+                                ['Game2-2015年-6月',{{lenbb.65}}],
+                                ['Game2-2010年-7月',{{lenbb.66}}],
+                                ['Game2-2015年-8月',{{lenbb.67}}],
+                                ['Game2-2015年-9月',{{lenbb.68}}],
+                                ['Game2-2015年-10月',{{lenbb.69}}],
+                                ['Game2-2015年-11月',{{lenbb.70}}],
+                                ['Game2-2015年-12月',{{lenbb.71}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game2-2016年',
+                                data:[{
+                                    name: 'Game2-2016年-1月',
+                                    y: {{lenbb.72}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game2-2016年-2月',{{lenbb.73}}],
+                                ['Game2-2016年-3月',{{lenbb.74}}],
+                                ['Game2-2016年-4月',{{lenbb.75}}],
+                                ['Game2-2016年-5月',{{lenbb.76}}],
+                                ['Game2-2016年-6月',{{lenbb.77}}],
+                                ['Game2-2016年-7月',{{lenbb.78}}],
+                                ['Game2-2016年-8月',{{lenbb.79}}],
+                                ['Game2-2016年-9月',{{lenbb.80}}],
+                                ['Game2-2016年-10月',{{lenbb.81}}],
+                                ['Game2-2016年-11月',{{lenbb.82}}],
+                                ['Game2-2016年-12月',{{lenbb.83}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game3-2010年',
+                                data:[{
+                                    name: 'Game3-2010年-1月',
+                                    y: {{lencc.0}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game3-2010年-2月',{{lencc.1}}],
+                                ['Game3-2010年-3月',{{lencc.2}}],
+                                ['Game3-2010年-4月',{{lencc.3}}],
+                                ['Game3-2010年-5月',{{lencc.4}}],
+                                ['Game3-2010年-6月',{{lencc.5}}],
+                                ['Game3-2010年-7月',{{lencc.6}}],
+                                ['Game3-2010年-8月',{{lenaa.7}}],
+                                ['Game3-2010年-9月',{{lencc.8}}],
+                                ['Game3-2010年-10月',{{lencc.9}}],
+                                ['Game3-2010年-11月',{{lencc.10}}],
+                                ['Game3-2010年-12月',{{lencc.11}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game3-2011年',
+                                data:[{
+                                    name: 'Game3-2011年-1月',
+                                    y: {{lencc.12}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game3-2011年-2月',{{lencc.13}}],
+                                ['Game3-2011年-3月',{{lencc.14}}],
+                                ['Game3-2011年-4月',{{lencc.15}}],
+                                ['Game3-2011年-5月',{{lencc.16}}],
+                                ['Game3-2011年-6月',{{lencc.17}}],
+                                ['Game3-2011年-7月',{{lencc.18}}],
+                                ['Game3-2011年-8月',{{lencc.19}}],
+                                ['Game3-2011年-9月',{{lencc.20}}],
+                                ['Game3-2011年-10月',{{lencc.21}}],
+                                ['Game3-2011年-11月',{{lencc.22}}],
+                                ['Game3-2011年-12月',{{lencc.23}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game3-2012年',
+                                data:[{
+                                    name: 'Game3-2012年-1月',
+                                    y: {{lencc.24}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game3-2012年-2月',{{lencc.25}}],
+                                ['Game3-2012年-3月',{{lencc.26}}],
+                                ['Game3-2012年-4月',{{lencc.27}}],
+                                ['Game3-2012年-5月',{{lencc.28}}],
+                                ['Game3-2012年-6月',{{lencc.29}}],
+                                ['Game3-2012年-7月',{{lencc.30}}],
+                                ['Game3-2012年-8月',{{lencc.31}}],
+                                ['Game3-2012年-9月',{{lencc.32}}],
+                                ['Game3-2012年-10月',{{lencc.33}}],
+                                ['Game3-2012年-11月',{{lencc.34}}],
+                                ['Game3-2012年-12月',{{lencc.35}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game3-2013年',
+                                data:[{
+                                    name: 'Game3-2013年-1月',
+                                    y: {{lencc.36}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game3-2013年-2月',{{lencc.37}}],
+                                ['Game3-2013年-3月',{{lencc.38}}],
+                                ['Game3-2013年-4月',{{lencc.39}}],
+                                ['Game3-2013年-5月',{{lencc.40}}],
+                                ['Game3-2013年-6月',{{lencc.41}}],
+                                ['Game3-2013年-7月',{{lencc.42}}],
+                                ['Game3-2013年-8月',{{lencc.43}}],
+                                ['Game3-2013年-9月',{{lencc.44}}],
+                                ['Game3-2013年-10月',{{lencc.45}}],
+                                ['Game3-2013年-11月',{{lencc.46}}],
+                                ['Game3-2013年-12月',{{lencc.47}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game3-2014年',
+                                data:[{
+                                    name: 'Game3-2014年-1月',
+                                    y: {{lencc.48}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game3-2014年-2月',{{lencc.49}}],
+                                ['Game3-2014年-3月',{{lencc.50}}],
+                                ['Game3-2014年-4月',{{lencc.51}}],
+                                ['Game3-2014年-5月',{{lencc.52}}],
+                                ['Game3-2014年-6月',{{lencc.53}}],
+                                ['Game3-2014年-7月',{{lencc.54}}],
+                                ['Game3-2014年-8月',{{lencc.55}}],
+                                ['Game3-2014年-9月',{{lencc.56}}],
+                                ['Game3-2014年-10月',{{lencc.57}}],
+                                ['Game3-2014年-11月',{{lencc.58}}],
+                                ['Game3-2014年-12月',{{lencc.59}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game3-2015年',
+                                data:[{
+                                    name: 'Game3-2015年-1月',
+                                    y: {{lencc.60}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game3-2015年-2月',{{lencc.61}}],
+                                ['Game3-2015年-3月',{{lencc.62}}],
+                                ['Game3-2015年-4月',{{lencc.63}}],
+                                ['Game3-2015年-5月',{{lencc.64}}],
+                                ['Game3-2015年-6月',{{lencc.65}}],
+                                ['Game3-2015年-7月',{{lencc.66}}],
+                                ['Game3-2015年-8月',{{lencc.67}}],
+                                ['Game3-2015年-9月',{{lencc.68}}],
+                                ['Game3-2015年-10月',{{lencc.69}}],
+                                ['Game3-2015年-11月',{{lencc.70}}],
+                                ['Game3-2015年-12月',{{lencc.71}}]
+                                ]
+                            },{
+                                name:'Percentage in totals',
+                                id: 'Game3-2016年',
+                                data:[{
+                                    name: 'Game3-2016年-1月',
+                                    y: {{lencc.72}},
+                                    sliced: true,
+                                    selected: true
+                                },
+                                ['Game3-2016年-2月',{{lencc.73}}],
+                                ['Game3-2016年-3月',{{lencc.74}}],
+                                ['Game3-2016年-4月',{{lencc.75}}],
+                                ['Game3-2016年-5月',{{lencc.76}}],
+                                ['Game3-2016年-6月',{{lencc.77}}],
+                                ['Game3-2016年-7月',{{lencc.78}}],
+                                ['Game3-2016年-8月',{{lencc.79}}],
+                                ['Game3-2016年-9月',{{lencc.80}}],
+                                ['Game3-2016年-10月',{{lencc.81}}],
+                                ['Game3-2016年-11月',{{lencc.82}}],
+                                ['Game3-2016年-12月',{{lencc.83}}]
+                                ]
+                            }]
+                    }
+                });
+            });
+            </script>
+
+            <!--<script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>-->
+            <script type="text/javascript" src="{% static 'js/highcharts.js' %}"></script>
+            <script src="http://cdn.hcharts.cn/highcharts/highcharts-3d.js"></script>
+            <script src="http://cdn.hcharts.cn/highcharts/modules/data.js"></script>
+            <script src="http://cdn.hcharts.cn/highcharts/modules/drilldown.js"></script>
+
+        </div>
+       
+    </div>
+{% endblock %}
+

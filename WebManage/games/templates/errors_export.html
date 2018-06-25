@@ -1,0 +1,31 @@
+{% extends "admin/mybase_site.html" %}
+{% load i18n admin_static admin_list admin_urls suit_list suit_tags %}
+{% load url from suit_compat %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  {#  <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}" />#}
+  {% if cl.formset %}
+    {#    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />#}
+  {% endif %}
+  {% if cl.formset or action_form %}
+    {% url 'admin:jsi18n' as jsi18nurl %}
+    <script type="text/javascript" src="{{ jsi18nurl|default:'../../jsi18n/' }}"></script>
+  {% endif %}
+  {{ media.css }}
+  {% if not actions_on_top and not actions_on_bottom %}
+    <style>
+      {#      #changelist table thead th:first-child {width: inherit}#}
+    </style>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <div id="content-main">
+    <h1>您好，该数据超出xls表的上限，请您选择后导出 :)<h2>
+    <div class="errors_export">
+        <ul class="breadcrumb">
+          <a href="Javascript:window.history.go(-1)" class="btn btn-info">好的 :)</a>
+    </div>
+  </div>
+{% endblock %}

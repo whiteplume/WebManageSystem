@@ -1,0 +1,196 @@
+
+{% extends "admin/mybase_site.html" %}
+{% load i18n admin_static admin_list admin_urls suit_list suit_tags %}
+{% load url from suit_compat %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  {#  <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}" />#}
+  {% if cl.formset %}
+    {#    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />#}
+  {% endif %}
+  {% if cl.formset or action_form %}
+    {% url 'admin:jsi18n' as jsi18nurl %}
+    <script type="text/javascript" src="{{ jsi18nurl|default:'../../jsi18n/' }}"></script>
+  {% endif %}
+  {{ media.css }}
+  {% if not actions_on_top and not actions_on_bottom %}
+    <style>
+      {#      #changelist table thead th:first-child {width: inherit}#}
+    </style>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<script type="text/javascript" src="http://cdn.hcharts.cn/jquery/jquery-1.8.3.min.js"></script>
+    <div id="content-main">
+        <div class="choose_year">
+            <ul class="breadcrumb">
+                <a href="{% url 'line_index' %}" class="btn btn-info">区域图</a>
+                <a href="{% url 'column_index' %}" class="btn btn-info">柱状图</a>
+                <a href="{% url 'pie_index' %}" class="btn btn-info">饼图</a>
+            </ul>
+        </div>
+        <div id="charts" style="margin-top:30px">
+            <style type="text/css">
+                #charts {
+                    height: 400px; 
+                    min-width: 310px; 
+                    max-width: 800px;
+                    margin: 0 auto;
+                }
+            </style>
+            <script type="text/javascript">
+                $(function () {
+                    $('#charts').highcharts({
+                        chart: {
+                            type: 'column',
+                            options3d: {
+                                enabled: true,
+                                alpha: 15,
+                                beta: 10,
+                                depth: 100
+                            }
+                        },
+                        title: {
+                            text: {{yr}} + '-' + {{mth}} + '  Record Amount'
+                        },
+                        //subtitle: {
+                        //    text: 'Source: WorldClimate.com'
+                        //},
+                        xAxis: {
+                            categories: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+                            title: {
+                                text: 'day'
+                            },
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: {
+                                text: 'Record Amount(each day)'
+                            }
+                        },
+                        legend: {
+                            align: 'right',
+                            x: -30,
+                            verticalAlign: 'top',
+                            y: 25,
+                            floating: true,
+                            backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                            borderColor: '#CCC',
+                            borderWidth: 1,
+                            shadow: false
+                        },
+                        tooltip: {
+                            headerFormat: '<b>{point.x}</b><br/>',
+                            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                        },
+                        plotOptions: {
+                            column: {
+                                stacking: 'normal',
+                                dataLabels: {
+                                    enabled: true,
+                                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                                    style: {
+                                        textShadow: '0 0 3px black'
+                                    }
+                                }
+                            }
+                        },
+                        series: [{
+                            name: 'Game1',
+                            data: [{{lena.0}}, {{lena.1}}, {{lena.2}}, {{lena.3}}, {{lena.4}}, {{lena.5}}, {{lena.6}}, {{lena.7}}, {{lena.8}}, {{lena.9}}, {{lena.10}}, {{lena.11}}, {{lena.12}}, {{lena.13}}, {{lena.14}}, {{lena.15}}, {{lena.16}}, {{lena.17}}, {{lena.18}}, {{lena.19}}, {{lena.20}}, {{lena.21}}, {{lena.22}}, {{lena.23}}, {{lena.24}}, {{lena.25}}, {{lena.26}}, {{lena.27}}, {{lena.28}}, {{lena.29}}, {{lena.30}}]
+
+                        }, {
+                            name: 'Game2',
+                            data: [{{lenb.0}}, {{lenb.1}}, {{lenb.2}}, {{lenb.3}}, {{lenb.4}}, {{lenb.5}}, {{lenb.6}}, {{lenb.7}}, {{lenb.8}}, {{lenb.9}}, {{lenb.10}}, {{lenb.11}}, {{lenb.12}}, {{lenb.13}}, {{lenb.14}}, {{lenb.15}}, {{lenb.16}}, {{lenb.17}}, {{lenb.18}}, {{lenb.19}}, {{lenb.20}}, {{lenb.21}}, {{lenb.22}}, {{lenb.23}}, {{lenb.24}}, {{lenb.25}}, {{lenb.26}}, {{lenb.27}}, {{lenb.28}}, {{lenb.29}}, {{lenb.30}}]
+
+                        }, {
+                            name: 'Game3',
+                            data: [{{lenc.0}}, {{lenc.1}}, {{lenc.2}}, {{lenc.3}}, {{lenc.4}}, {{lenc.5}}, {{lenc.6}}, {{lenc.7}}, {{lenc.8}}, {{lenc.9}}, {{lenc.10}}, {{lenc.11}}, {{lenc.12}}, {{lenc.13}}, {{lenc.14}}, {{lenc.15}}, {{lenc.16}}, {{lenc.17}}, {{lenc.18}}, {{lenc.19}}, {{lenc.20}}, {{lenc.21}}, {{lenc.22}}, {{lenc.23}}, {{lenc.24}}, {{lenc.25}}, {{lenc.26}}, {{lenc.27}}, {{lenc.28}}, {{lenc.29}}, {{lenc.30}}]
+                        }]
+                    });
+                });
+            </script>
+
+            <!--<script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>-->
+            <script type="text/javascript" src="{% static 'js/highcharts.js' %}"></script>
+            <script type="text/javascript" src="{% static 'js/highcharts-3d.js' %}"></script>
+            <script type="text/javascript" src="{% static 'js/exporting.js' %}"></script>
+        </div>
+
+        <div class="choose_year" style="margin-top:50px">
+            <ul class="breadcrumb">
+
+                <form name="reg_testdate" action="/column/" method="get">
+                    <select name="YYYY" onChange="YYYYDD(this.value)" style="margin-top:12px; width:70px">
+                        <option value="">年</option>
+                    </select> 
+                    <select name="MM" onChange="MMDD(this.value)" style="margin-top:12px; width:70px">
+                        <option value="">月</option>
+                    </select> 
+                    <select name="DD" style="margin-top:12px; width:70px">
+                        <option value="" selected>日</option>
+                    </select>
+                  <input type="submit" class="btn btn-success" value="查询" />
+                </form>
+
+                <script language="JavaScript">   
+                    function YYYYMMDDstart(){   
+                        MonHead = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];   
+                        
+                        //先给年下拉框赋内容   
+                        var y  = new Date().getFullYear();  
+                        for (var i = (y-6); i < (y+1); i++) //以今年为准  
+                               document.reg_testdate.YYYY.options.add(new Option(" "+ i, i));   
+                        
+                        //赋月份的下拉框   
+                        for (var i = 1; i < 13; i++)   
+                               document.reg_testdate.MM.options.add(new Option(" " + i, i));   
+                        
+                        document.reg_testdate.YYYY.value = {{yr}};   
+                        document.reg_testdate.MM.value = {{mth}};   
+                        var n = MonHead[new Date().getMonth()];   
+                        if (new Date().getMonth() ==1 && IsPinYear(YYYYvalue)) n++;   
+                            writeDay(n); //赋日期下拉框Author:meizz   
+                        //document.reg_testdate.DD.value = new Date().getDate(); 
+                    }   
+                    if(document.attachEvent)   
+                        window.attachEvent("onload", YYYYMMDDstart);   
+                    else   
+                    window.addEventListener('load', YYYYMMDDstart, false);   
+                    function YYYYDD(str) //年发生变化时日期发生变化(主要是判断闰平年)   
+                    {   
+                        var MMvalue = document.reg_testdate.MM.options[document.reg_testdate.MM.selectedIndex].value;   
+                        if (MMvalue == ""){ var e = document.reg_testdate.DD; optionsClear(e); return;}   
+                        var n = MonHead[MMvalue - 1];   
+                        if (MMvalue ==2 && IsPinYear(str)) n++;   
+                        writeDay(n)   
+                    }   
+                    function MMDD(str)   //月发生变化时日期联动   
+                    {   
+                        var YYYYvalue = document.reg_testdate.YYYY.options[document.reg_testdate.YYYY.selectedIndex].value;   
+                        if (YYYYvalue == ""){ var e = document.reg_testdate.DD; optionsClear(e); return;}   
+                        var n = MonHead[str - 1];   
+                        if (str ==2 && IsPinYear(YYYYvalue)) n++;   
+                        writeDay(n)   
+                    }   
+                    function writeDay(n)   //据条件写日期的下拉框   
+                    {   
+                        var e = document.reg_testdate.DD; optionsClear(e);   
+                        for (var i=1; i<(n+1); i++)   
+                        e.options.add(new Option(" "+ i, i));   
+                    }   
+                    function IsPinYear(year)//判断是否闰平年   
+                    {
+                        return(0 == year%4 && (year%100 !=0 || year%400 == 0));
+                    }   
+                    function optionsClear(e)   
+                    {   
+                        e.options.length = 1;   
+                    }   
+                </script>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

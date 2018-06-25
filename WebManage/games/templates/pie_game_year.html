@@ -1,0 +1,159 @@
+{% extends "admin/mybase_site.html" %}
+{% load i18n admin_static admin_list admin_urls suit_list suit_tags %}
+{% load url from suit_compat %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  {#  <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}" />#}
+  {% if cl.formset %}
+    {#    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />#}
+  {% endif %}
+  {% if cl.formset or action_form %}
+    {% url 'admin:jsi18n' as jsi18nurl %}
+    <script type="text/javascript" src="{{ jsi18nurl|default:'../../jsi18n/' }}"></script>
+  {% endif %}
+  {{ media.css }}
+  {% if not actions_on_top and not actions_on_bottom %}
+    <style>
+      {#      #changelist table thead th:first-child {width: inherit}#}
+    </style>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<script type="text/javascript" src="http://cdn.hcharts.cn/jquery/jquery-1.8.3.min.js"></script>
+    <div id="content-main">
+        <div class="choose_year">
+            <ul class="breadcrumb">
+                <a href="{% url 'line_index' %}" class="btn btn-info">区域图</a>
+                <a href="{% url 'column_index' %}" class="btn btn-info">柱状图</a>
+                <a href="{% url 'pie_index' %}" class="btn btn-info">饼图</a>
+            </ul>
+        </div>
+        <div id="charts" style="margin-top:30px">
+            
+            <style type="text/css">
+            ${demo.css}
+            </style>
+            <script type="text/javascript">
+            $(function () {
+                $('#charts').highcharts({
+                    chart: {
+                        type: 'pie',
+                        options3d: {
+                            enabled: true,
+                            alpha: 45,
+                            beta: 0
+                        }
+                    },
+                    title: {
+                        text: 'The Percentage of game '+ {{d}} +' in total records in '+{{yr}}
+                    },
+                    plotOptions: {
+                        series: {
+                            dataLabels: {
+                                enabled: true,
+                                format: '{point.name}: {point.y:.1f}%'
+                            }
+                        },
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            depth: 35,
+                            dataLabels: {
+                                enabled: true,
+                                format: '{point.name}'
+                            }
+                        }
+                    },
+                    
+                   
+                    tooltip: {
+                        valueSuffix: '%'
+                    },
+                    series: [{
+                        name: 'Percentage in totals',
+                        colorByPoint: true,
+                        data: [{
+                            name: '1月',
+                            y: {{lena.0}},
+                            sliced: true,
+                            selected: true
+                        }, {
+                            name: '2月',
+                            y: {{lena.1}},
+                        }, {
+                            name: '3月',
+                            y: {{lena.2}},
+                        }, {
+                            name: '4月',
+                            y: {{lena.3}},
+                        }, {
+                            name: '5月',
+                            y: {{lena.4}},
+                        }, {
+                            name: '6月',
+                            y: {{lena.5}},
+                        }, {
+                            name: '7月',
+                            y: {{lena.6}},
+                        }, {
+                            name: '8月',
+                            y: {{lena.7}},
+                        }, {
+                            name: '9月',
+                            y: {{lena.8}},
+                        }, {
+                            name: '10月',
+                            y: {{lena.9}},
+                        }, {
+                            name: '11月',
+                            y: {{lena.10}},
+                        }, {
+                            name: '12月',
+                            y: {{lena.11}},
+                        }]
+                    }]
+
+                });
+            });
+            </script>
+
+            <!--<script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>-->
+            <script type="text/javascript" src="{% static 'js/highcharts.js' %}"></script>
+            <script type="text/javascript" src="{% static 'js/highcharts-3d.js' %}"></script>
+            <script type="text/javascript" src="{% static 'js/data.js' %}"></script>
+            <script type="text/javascript" src="{% static 'js/exporting.js' %}"></script>
+
+        </div>
+        <div class="choose_year" style="margin-top:50px">
+            <ul class="breadcrumb">
+
+                <form name="reg_testdate" action="/pie_game/" method="get">
+                    <select name="ID" style="margin-top:12px; width:70px">
+                        <option value="" selected>Game</option>
+                        <option value="1">cso</option>
+                        <option value="2">cso2</option>
+                        <option value="3">cso3</option>
+                    </select> 
+                    <select name="YYYY" style="margin-top:12px; width:70px">
+                        <option value="" selected>年</option>
+                        <option value="2010">2010</option>
+                        <option value="2011">2011</option>
+                        <option value="2012">2012</option>
+                        <option value="2013">2013</option>
+                        <option value="2014">2014</option>
+                        <option value="2015">2015</option>
+                        <option value="2016">2016</option>
+                    </select> 
+                  <input type="submit" class="btn btn-success" value="查询" />
+                </form>
+                <script type="text/javascript">
+                document.reg_testdate.ID.value = {{d}};  
+                document.reg_testdate.YYYY.value = {{yr}}; 
+                </script>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
