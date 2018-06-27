@@ -74,7 +74,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 SUIT_CONFIG = {
     # header
-    'ADMIN_NAME': u'世纪天成',
+    'ADMIN_NAME': u'*****',
     
     #'LIST_PER_PAGE': 10,
     'MENU': (
@@ -98,11 +98,11 @@ WSGI_APPLICATION = 'WebManage.wsgi.application'
 DATABASES ={
     'default': {
         'ENGINE': 'sqlserver',
-        'NAME': 'tcpx',
-        'HOST': '192.168.141.9',
+        'NAME': '*****',
+        'HOST': '*****',
         'PORT': '1433',
-        'USER': 'sa',
-        'PASSWORD': 'tiancity123!@#',
+        'USER': '*****',
+        'PASSWORD': '*****',
         'OPTIONS': {
             'DRIVER': 'SQL Server Native Client 10.0',
         },
